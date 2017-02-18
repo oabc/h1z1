@@ -8,7 +8,7 @@ define('DB_HOST','127.0.0.1');
 //define('DB_USER','root');
 //define('DB_PWD','3dG7sqew6k');
 
-define('DB_USER','root6');
+define('DB_USER','root');
 define('DB_PWD','root');
 
 define('DB_DBNAME','KQS');
