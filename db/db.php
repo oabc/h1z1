@@ -8,7 +8,7 @@ date_default_timezone_set('PRC');
 
 //Using Mysqli
 $dbc = new mysqli(DB_HOST,DB_USER,DB_PWD,DB_DBNAME);
-print_r($dbc);
+var_dump($dbc);
 $db_char = DB_CHARSET;
 $dbc->query("SET NAMES utf8");
 $dbc->query("SET time_zone = '+8:00'");
