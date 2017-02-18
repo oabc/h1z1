@@ -146,6 +146,7 @@ class medoo
 			}
 		}
 		catch (PDOException $e) {
+			die('db err7');
 			throw new Exception($e->getMessage());
 		}
 	}
