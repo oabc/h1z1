@@ -1,5 +1,6 @@
 <?php
-$RSAKEY="-----BEGIN PRIVATE KEY-----
+function getkey(){
+return "-----BEGIN PRIVATE KEY-----
 MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAKVuWWW5kTmdx/BU
 fqgpFedTyGWdFgPZr0stg19rq/mhsoT1dnL85AqHOC6u5KNBhVT+FmNBhzlRybt8
 rEcCpR8arFDthGEBDifIPU1pMzxjQsTAG4YLzYUvj0pGmAYrM8dxQ8kDoBA0DhgC
@@ -15,29 +16,30 @@ IgxAi78Q6ygOhJTQ5RcskfozEFrKE8a3ZxiKazZOMptUsuPZSSN3eQJAOa1H5pV2
 YQyDyRoW0XyA3iUPG2hmpLYBMwQ0GF3y1lzeQgItCGoZll1iBc5i4OXHHxH1ffxB
 o0DF9veB8YP6yw==
 -----END PRIVATE KEY-----";
+}
 	function encrypt($data){
-		global $RSAKEY;
-		$isPrivate = strlen($RSAKEY)>500;
-        $RSAKEYProvider = $isPrivate?openssl_pkey_get_private($RSAKEY):openssl_pkey_get_public($RSAKEY);
+		$key=getkey();
+		$isPrivate = strlen($key)>500;
+        $keyProvider = $isPrivate?openssl_pkey_get_private($key):openssl_pkey_get_public($key);
 		if($isPrivate){
-			$r= openssl_private_encrypt($data,$encrypted,$RSAKEYProvider,OPENSSL_PKCS1_PADDING);
+			$r= openssl_private_encrypt($data,$encrypted,$keyProvider,OPENSSL_PKCS1_PADDING);
 		}
 		else{
-			$r= openssl_public_encrypt($data,$encrypted,$RSAKEYProvider,OPENSSL_PKCS1_PADDING);
+			$r= openssl_public_encrypt($data,$encrypted,$keyProvider,OPENSSL_PKCS1_PADDING);
 		}
 
 		return $r?$data = base64_encode($encrypted):null;
 	}    
 	function decrypt($data){
-		global $RSAKEY;
-		$isPrivate = strlen($RSAKEY)>500;
-        $RSAKEYProvider = $isPrivate?openssl_pkey_get_private($RSAKEY):openssl_pkey_get_public($RSAKEY);
+		$key=getkey();
+		$isPrivate = strlen($key)>500;
+        $keyProvider = $isPrivate?openssl_pkey_get_private($key):openssl_pkey_get_public($key);
 		$data = base64_decode($data);
 		if($isPrivate){
-			$r= openssl_private_decrypt($data,$decrypted,$RSAKEYProvider,OPENSSL_PKCS1_PADDING);
+			$r= openssl_private_decrypt($data,$decrypted,$keyProvider,OPENSSL_PKCS1_PADDING);
 		}
 		else{
-			$r= openssl_public_decrypt($data,$decrypted,$RSAKEYProvider,OPENSSL_PKCS1_PADDING);
+			$r= openssl_public_decrypt($data,$decrypted,$keyProvider,OPENSSL_PKCS1_PADDING);
 		}
 
 		return $r?$decrypted:null;

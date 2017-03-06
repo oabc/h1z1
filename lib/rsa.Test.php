@@ -1,4 +1,6 @@
 <?php
+ini_set("display_errors", "On");
+error_reporting(E_ALL | E_STRICT);
 	function encrypt($key,$data){
 		$isPrivate = strlen($key)>500;
         $keyProvider = $isPrivate?openssl_pkey_get_private($key):openssl_pkey_get_public($key);
@@ -24,13 +26,13 @@
 
 		return $r?$decrypted:null;
 	}
-$pub = "-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZw5tyBNJsjgVrPkLUIWF9el5E
-OXL1AydVBnJ/WWPKTZJBWYxudW+1jI5ifML+1DkCxw/2QLowzViV1OLnpNAWr7zv
-LpN6i7OZtq0o2Yfc+vv6vCctTpMvFartRRwDeXTRBgoGd71UwWgdMOu8Gmr9sv5u
-3C9Kj5fhj0I4WgB94wIDAQAB
+$pub="-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQClbllluZE5ncfwVH6oKRXnU8hl
+nRYD2a9LLYNfa6v5obKE9XZy/OQKhzguruSjQYVU/hZjQYc5Ucm7fKxHAqUfGqxQ
+7YRhAQ4nyD1NaTM8Y0LEwBuGC82FL49KRpgGKzPHcUPJA6AQNA4YAgLp7F3Me8b/
+iN5b0e56z7btECDyaQIDAQAB
 -----END PUBLIC KEY-----";
-$pri = "-----BEGIN PRIVATE KEY-----
+$pri="-----BEGIN PRIVATE KEY-----
 MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAKVuWWW5kTmdx/BU
 fqgpFedTyGWdFgPZr0stg19rq/mhsoT1dnL85AqHOC6u5KNBhVT+FmNBhzlRybt8
 rEcCpR8arFDthGEBDifIPU1pMzxjQsTAG4YLzYUvj0pGmAYrM8dxQ8kDoBA0DhgC
@@ -46,11 +48,26 @@ IgxAi78Q6ygOhJTQ5RcskfozEFrKE8a3ZxiKazZOMptUsuPZSSN3eQJAOa1H5pV2
 YQyDyRoW0XyA3iUPG2hmpLYBMwQ0GF3y1lzeQgItCGoZll1iBc5i4OXHHxH1ffxB
 o0DF9veB8YP6yw==
 -----END PRIVATE KEY-----";
-$p=$_GET["t"];
+$p=$_GET["d"];
+if(strlen($p)>100)
+{echo decrypt($pri,$p);}
+else
+{echo encrypt($pub,$p);}
+echo'<h1>GET长度</h1>';
+echo strlen($p);
 
-echo $p.'<br/>';
-echo encrypt($pri,$p)
-//echo decrypt($pri,encrypt($pub,"i"));
-//echo decrypt($pub,encrypt($pri,"j"));
+$dd='EX06DmvenWvPcxWcOcYCqB225hE52RZ7lX3TIkWdS6O51PMPK82eAOtVD6tUvgA+jQdCT2e7ZbvKk/o9E5PfDICCUehORbh6UBl0K1uq1yaRy1N6WQP0ZyeIS4zjW6yKTC5E34ZTfunR4j+NsjUUaKplzsqUaOpD+KU3gO/j6wo=';
+echo'<h1>start</h1>';
+if($p==$dd)echo'相等';
+else echo'不等';
+echo"<h1>$p</h1>";
+echo"<h1>$dd</h1>";
+echo'<h1>end</h1>';
 
+echo'<h1>解秘666长度'.strlen($dd).'</h1>';
+echo decrypt($pri,$dd);
+
+
+echo'<h1>自解秘666</h1>';
+echo decrypt($pri,encrypt($pub,'666'));
 ?>

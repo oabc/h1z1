@@ -667,10 +667,17 @@ class medoo
 		return $query ? $query->fetchAll(
 			(is_string($columns) && $columns != '*') ? PDO::FETCH_COLUMN : PDO::FETCH_ASSOC
 		) : false;
+	}	
+	public function sel($sql,$onecol=false)
+	{
+		$query = $this->query($sql);
+
+		return $query ? $query->fetchAll($onecol? PDO::FETCH_COLUMN : PDO::FETCH_ASSOC) : false;
 	}
 
-	public function insert($table, $datas)
+	public function insert($table, $datas,$rets=false)
 	{
+		$_result=0;
 		$lastId = array();
 
 		// Check indexed or associative array
@@ -682,8 +689,7 @@ class medoo
 		foreach ($datas as $data)
 		{
 			$values = array();
-			$columns = array();
-
+			$columns = array();			
 			foreach ($data as $key => $value)
 			{
 				array_push($columns, $this->column_quote($key));
@@ -714,11 +720,11 @@ class medoo
 				}
 			}
 
-			$this->exec('INSERT INTO "' . $table . '" (' . implode(', ', $columns) . ') VALUES (' . implode($values, ', ') . ')');
+			$_result=$this->exec('INSERT INTO "' . $table . '" (' . implode(', ', $columns) . ') VALUES (' . implode($values, ', ') . ')');
 
 			$lastId[] = $this->pdo->lastInsertId();
 		}
-
+		if($rets)return $_result;
 		return count($lastId) > 1 ? $lastId : $lastId[ 0 ];
 	}
 
@@ -770,7 +776,6 @@ class medoo
 
 		return $this->exec('UPDATE "' . $table . '" SET ' . implode(', ', $fields) . $this->where_clause($where));
 	}
-
 	public function delete($table, $where)
 	{
 		return $this->exec('DELETE FROM "' . $table . '"' . $this->where_clause($where));
